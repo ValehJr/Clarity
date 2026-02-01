@@ -9,8 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct RegisterView: View {
-    @State var name: String = ""
-    @State var email: String = ""
+    @StateObject var vm = RegisterViewModel()
     @FocusState var isNameFocused: Bool
     @FocusState var isEmailFocused: Bool
     
@@ -70,10 +69,10 @@ struct RegisterView: View {
             Text("Full name")
                 .appFont(weight: .bold, size: 12,foregroundColor: .secondaryTextCl)
             
-            TextField("", text: $name)
+            TextField("", text: $vm.name)
                 .floatingPlaceholderStyle(
                     placeholder: "Steve Jobs",
-                    text: $name,
+                    text: $vm.name,
                     placeholderColor:.secondaryTextCl,
                     backgroundColor: .fieldStrokeCl,
                     strokeColor: .fieldStrokeCl
@@ -91,10 +90,10 @@ struct RegisterView: View {
             Text("Email Address")
                 .appFont(weight: .bold, size: 12,foregroundColor: .secondaryTextCl)
             
-            TextField("", text: $email)
+            TextField("", text: $vm.email)
                 .floatingPlaceholderStyle(
                     placeholder: "example@example.com",
-                    text: $email,
+                    text: $vm.email,
                     placeholderColor:.secondaryTextCl,
                     backgroundColor: .fieldStrokeCl,
                     strokeColor: .fieldStrokeCl
@@ -118,10 +117,11 @@ struct RegisterView: View {
                 .frame(maxWidth: .infinity, minHeight: 52)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.primaryAccentCl)
+                        .fill(vm.isContinueButtonValid ? .primaryAccentCl : .primaryAccentCl.opacity(0.5))
                 )
         }
         .padding(.horizontal,24)
+        .disabled(!vm.isContinueButtonValid)
     }
 }
 

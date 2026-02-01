@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct SmokingHabitsView: View {
-    @State var packSize: String = ""
-    @State var packPrice: String = ""
-    @State var dailyAverage: String = ""
+    @ObservedObject var vm: RegisterViewModel
     
     @FocusState var isPackSizeFocused: Bool
     @FocusState var isPackPriceFocused: Bool
@@ -56,10 +54,10 @@ struct SmokingHabitsView: View {
             Text("CIGARETTES PER PACK")
                 .appFont(weight: .bold, size: 12,foregroundColor: .secondaryTextCl)
             
-            TextField("", text: $packSize)
+            TextField("", text: $vm.packSize)
                 .imagePlaceholderStyle(
                     placeholder: "20",
-                    text: $packSize,
+                    text: $vm.packSize,
                     placeholderColor: .secondaryTextCl,
                     strokeColor: .fieldStrokeCl,
                     backgroundColor: .fieldStrokeCl,
@@ -77,10 +75,10 @@ struct SmokingHabitsView: View {
             Text("PRICE PER PACK")
                 .appFont(weight: .bold, size: 12,foregroundColor: .secondaryTextCl)
             
-            TextField("", text: $packPrice)
+            TextField("", text: $vm.packPrice)
                 .imagePlaceholderStyle(
                     placeholder: "20",
-                    text: $packPrice,
+                    text: $vm.packPrice,
                     placeholderColor: .secondaryTextCl,
                     strokeColor: .fieldStrokeCl,
                     backgroundColor: .fieldStrokeCl,
@@ -98,10 +96,10 @@ struct SmokingHabitsView: View {
             Text("DAILY AVERAGE")
                 .appFont(weight: .bold, size: 12,foregroundColor: .secondaryTextCl)
             
-            TextField("", text: $dailyAverage)
+            TextField("", text: $vm.dailyAverage)
                 .imagePlaceholderStyle(
                     placeholder: "20",
-                    text: $dailyAverage,
+                    text: $vm.dailyAverage,
                     placeholderColor: .secondaryTextCl,
                     strokeColor: .fieldStrokeCl,
                     backgroundColor: .fieldStrokeCl,
@@ -123,14 +121,15 @@ struct SmokingHabitsView: View {
                 .frame(maxWidth: .infinity, minHeight: 52)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.successCl)
+                        .fill(vm.isFinishButtonValid ? .successCl : .successCl.opacity(0.5))
                 )
         }
         .padding(.horizontal,24)
+        .disabled(!vm.isFinishButtonValid)
     }
     
 }
 
 #Preview {
-    SmokingHabitsView()
+    SmokingHabitsView(vm: RegisterViewModel())
 }
