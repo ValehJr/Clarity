@@ -115,12 +115,12 @@ struct RegisterView: View {
         } label: {
             Text("Continue")
                 .appFont(weight: .bold, size: 16, foregroundColor: .white)
+                .frame(maxWidth: .infinity, minHeight: 52)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.primaryAccentCl)
+                )
         }
-        .frame(maxWidth: .infinity, minHeight: 52)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.primaryAccentCl)
-        )
         .padding(.horizontal,24)
     }
 }

@@ -35,4 +35,24 @@ extension View {
             )
         )
     }
+    
+    func imagePlaceholderStyle(
+        placeholder: String,
+        text: Binding<String>,
+        placeholderColor: Color = .gray,
+        strokeColor: Color = .gray,
+        backgroundColor: Color = Color(uiColor: .systemBackground),
+        leftIcon: Image? = nil
+    ) -> some View {
+        self.modifier(
+            ImagePlaceholderTextField(
+                placeholder: placeholder,
+                placeholderColor: placeholderColor,
+                text: text,
+                strokeColor: strokeColor,
+                backgroundColor: backgroundColor,
+                leftIcon: leftIcon
+            )
+        )
+    }
 }
