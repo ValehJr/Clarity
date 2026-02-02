@@ -23,3 +23,7 @@ class RegisterViewModel: ObservableObject {
         !packSize.isEmpty && !packPrice.isEmpty && !dailyAverage.isEmpty
     }
 }
+
+enum RegistrationStep {
+    case smokingHabits
+}

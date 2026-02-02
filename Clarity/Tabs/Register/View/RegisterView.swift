@@ -13,31 +13,41 @@ struct RegisterView: View {
     @FocusState var isNameFocused: Bool
     @FocusState var isEmailFocused: Bool
     
+    @State private var navigationPath = NavigationPath()
     
     var body: some View {
-        ZStack {
-            Color.backgroundCl.ignoresSafeArea()
-            VStack(spacing:16) {
-                
-                profileIcon
-                title
-                    .padding(.bottom)
-                
-                nameField
-                    .padding(.bottom,8)
-                
-                emailField
-                    .padding(.bottom,24)
-                
-                continueButton
-                Spacer()
+        NavigationStack(path: $navigationPath) {
+            ZStack {
+                Color.backgroundCl.ignoresSafeArea()
+                VStack(spacing:16) {
+                    
+                    profileIcon
+                    title
+                        .padding(.bottom)
+                    
+                    nameField
+                        .padding(.bottom,8)
+                    
+                    emailField
+                        .padding(.bottom,24)
+                    
+                    continueButton
+                    Spacer()
+                }
+                .padding(.top,90)
             }
-            .padding(.top,90)
+            .onTapGesture {
+                isNameFocused = false
+                isEmailFocused = false
+            }
+            .onAppear {
+                isNameFocused = true
+            }
+            .navigationDestination(for: RegistrationStep.self) { step in
+                SmokingHabitsView(vm: vm)
+            }
         }
-        .onTapGesture {
-            isNameFocused = false
-            isEmailFocused = false
-        }
+
     }
     
     var profileIcon: some View {
@@ -57,7 +67,7 @@ struct RegisterView: View {
     var title: some View {
         VStack(spacing: 8) {
             Text("Create Profile")
-                .appFont(weight: .bold, size: 36,foregroundColor: .prrimaryTextCl)
+                .appFont(weight: .bold, size: 36,foregroundColor: .primaryTextCl)
             
             Text("Let's start your journey")
                 .appFont(weight: .medium, size: 18,foregroundColor: .secondaryTextCl)
@@ -110,7 +120,7 @@ struct RegisterView: View {
     
     var continueButton: some View {
         Button {
-            
+            navigationPath.append(RegistrationStep.smokingHabits)
         } label: {
             Text("Continue")
                 .appFont(weight: .bold, size: 16, foregroundColor: .white)

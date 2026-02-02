@@ -14,6 +14,8 @@ struct SmokingHabitsView: View {
     @FocusState var isPackPriceFocused: Bool
     @FocusState var isDailyAverageFocused: Bool
     
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         ZStack {
             Color.backgroundCl.ignoresSafeArea()
@@ -30,19 +32,38 @@ struct SmokingHabitsView: View {
                 finishButton
                 Spacer()
             }
-            .padding(.top,90)
+            .padding(.top,60)
         }
         .onTapGesture {
             isPackSizeFocused = false
             isPackPriceFocused = false
             isDailyAverageFocused = false
         }
+        .onAppear {
+            isPackSizeFocused = true
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(.chevronLeftIc)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.primaryTextCl)
+                }
+            }
+            .sharedBackgroundVisibility(.hidden)
+        }
     }
     
     var title: some View {
         VStack(spacing: 8) {
             Text("Smoking Habits ")
-                .appFont(weight: .bold, size: 36,foregroundColor: .prrimaryTextCl)
+                .appFont(weight: .bold, size: 36,foregroundColor: .primaryTextCl)
             
             Text("This helps us calculate your savings.")
                 .appFont(weight: .medium, size: 18,foregroundColor: .secondaryTextCl)
@@ -69,7 +90,7 @@ struct SmokingHabitsView: View {
         }
         .padding(.horizontal,24)
     }
-
+    
     var packPriceField: some View {
         VStack(alignment: .leading) {
             Text("PRICE PER PACK")
