@@ -50,13 +50,13 @@ struct CalendarView: View {
         
         Text(date.formatted(.dateTime.day()))
             .appFont(
-                weight: .medium,
+                weight: .semibold,
                 size: 14,
                 foregroundColor: .white
             )
             .frame(width: 40, height: 40)
             .background {
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 12)
                     .fill(backgroundColor)
             }
     }
