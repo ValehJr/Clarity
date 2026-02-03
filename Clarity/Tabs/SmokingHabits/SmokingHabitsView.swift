@@ -18,7 +18,10 @@ struct SmokingHabitsView: View {
     
     var body: some View {
         ZStack {
-            Color.backgroundCl.ignoresSafeArea()
+            LinearGradient(gradient: Gradient(colors: [.backgroundThreeCl,.backgroundTwoCl, .backgroundCl]), startPoint: .topTrailing, endPoint: .bottomLeading)
+                .ignoresSafeArea(.all)
+            
+            
             VStack(spacing:24) {
                 title
                     .padding(.bottom,24)

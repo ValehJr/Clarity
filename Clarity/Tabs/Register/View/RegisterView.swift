@@ -18,7 +18,9 @@ struct RegisterView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             ZStack {
-                Color.backgroundCl.ignoresSafeArea()
+                LinearGradient(gradient: Gradient(colors: [.backgroundThreeCl,.backgroundTwoCl, .backgroundCl]), startPoint: .topTrailing, endPoint: .bottomLeading)
+                    .ignoresSafeArea(.all)
+                
                 VStack(spacing:16) {
                     
                     profileIcon
