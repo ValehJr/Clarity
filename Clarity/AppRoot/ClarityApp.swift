@@ -10,23 +10,17 @@ import SwiftData
 
 @main
 struct ClarityApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    @StateObject private var authViewModel = AuthViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            RegisterView()
+            if authViewModel.isAuthenticated {
+                MainTabView()
+                    .environmentObject(authViewModel)
+            } else {
+                RegisterView()
+                    .environmentObject(authViewModel)
+            }
         }
-        .modelContainer(sharedModelContainer)
     }
 }

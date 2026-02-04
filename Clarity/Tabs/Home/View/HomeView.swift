@@ -76,9 +76,9 @@ struct HomeView: View {
                 .background {
                     RoundedRectangle(cornerRadius: 18)
                         .frame(width: 60,height: 60)
-                        .foregroundStyle(.plusButtonCl)
-                        .shadow(color: .plusButtonCl.opacity(0.6), radius: 5, x: -3, y: 5)
-                        .shadow(color: .plusButtonCl.opacity(0.6), radius: 5, x: 3, y: 5)
+                        .foregroundStyle(.primaryAccentCl)
+                        .shadow(color: .primaryAccentCl.opacity(0.6), radius: 5, x: -3, y: 5)
+                        .shadow(color: .primaryAccentCl.opacity(0.6), radius: 5, x: 3, y: 5)
                 }
         }
     }
