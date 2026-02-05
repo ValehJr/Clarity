@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SmokingHabitsView: View {
     @ObservedObject var vm: RegisterViewModel
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @Environment(\.modelContext) private var context
 
     @FocusState var isPackSizeFocused: Bool
     @FocusState var isPackPriceFocused: Bool
@@ -140,7 +140,7 @@ struct SmokingHabitsView: View {
     var finishButton: some View {
         Button {
             Task {
-                await vm.completeRegistration(authViewModel: authViewModel)
+                await vm.completeRegistration(context: context)
             }
         } label: {
             Text("Finish Setup")

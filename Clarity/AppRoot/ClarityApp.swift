@@ -10,17 +10,16 @@ import SwiftData
 
 @main
 struct ClarityApp: App {
-    @StateObject private var authViewModel = AuthViewModel()
-    
+    let container: ModelContainer
+
+    init() {
+        container = try! ModelContainer(for: User.self)
+    }
+
     var body: some Scene {
         WindowGroup {
-            if authViewModel.isAuthenticated {
-                MainTabView()
-                    .environmentObject(authViewModel)
-            } else {
-                RegisterView()
-                    .environmentObject(authViewModel)
-            }
+            RootView()
         }
+        .modelContainer(container)
     }
 }

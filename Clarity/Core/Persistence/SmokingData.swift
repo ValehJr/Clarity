@@ -5,8 +5,17 @@
 //  Created by Valeh Ismayilov on 04.02.26.
 //
 
-struct SmokingData: Codable {
-    let packSize: Int
-    let packPrice: Double
-    let dailyAverage: Int
+import SwiftData
+
+@Model
+class SmokingData {
+    var packSize: Int
+    var packPrice: Double
+    var dailyAverage: Int
+    
+    init(packSize: Int, packPrice: Double, dailyAverage: Int) {
+        self.packSize = packSize
+        self.packPrice = packPrice
+        self.dailyAverage = dailyAverage
+    }
 }

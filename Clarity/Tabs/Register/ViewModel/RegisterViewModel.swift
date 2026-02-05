@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import SwiftData
 
 class RegisterViewModel: ObservableObject {
     @Published var name: String = ""
@@ -25,28 +26,12 @@ class RegisterViewModel: ObservableObject {
         !packSize.isEmpty && !packPrice.isEmpty && !dailyAverage.isEmpty
     }
     
-    func completeRegistration(authViewModel: AuthViewModel) async {
-        guard let user = createUser() else {
-            errorMessage = "Please fill all fields correctly"
-            return
-        }
-        
+    func completeRegistration(context: ModelContext) async {
         isLoading = true
-        
-        do {
-            try authViewModel.completeRegistration(user: user)
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-        
-        isLoading = false
-    }
-    
-    private func createUser() -> User? {
         guard let packSizeInt = Int(packSize),
               let packPriceDouble = Double(packPrice),
               let dailyAverageInt = Int(dailyAverage) else {
-            return nil
+            return
         }
         
         let smokingData = SmokingData(
@@ -55,7 +40,11 @@ class RegisterViewModel: ObservableObject {
             dailyAverage: dailyAverageInt
         )
         
-        return User(name: name, email: email, smokingData: smokingData)
+        let user = User(name: name, email: email, smokingData: smokingData)
+        
+        context.insert(user)
+        
+        isLoading = false
     }
 }
 
