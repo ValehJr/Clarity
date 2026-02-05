@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CalendarView: View {
-    
+    let dailyAverage: Int
     let range: [Date]
     let counts: [Date: Int]
     
@@ -62,19 +62,22 @@ struct CalendarView: View {
     }
     
     func cellColor(for count: Int, isFuture: Bool) -> Color {
-        if isFuture {
-            return Color.gray.opacity(0.2)
+        if count == 0 {
+            return Color.gray.opacity(0.3)
         }
         
-        switch count {
-        case 0:
-            return Color.gray.opacity(0.3)
-        case 1...3:
+        let ratio = Double(count) / Double(dailyAverage)
+        
+        switch ratio {
+        case 0 ..< 0.5:
             return Color.primaryAccentCl.opacity(0.7)
-        case 4...7:
+            
+        case 0.5 ... 1.0:
             return Color.primaryAccentCl
-        case 8...12:
+            
+        case 1.0 ... 1.5:
             return Color.warningCl.opacity(0.7)
+            
         default:
             return Color.warningCl
         }

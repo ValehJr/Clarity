@@ -9,12 +9,13 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab: Tab = .home
+    var user: User
     
     var body: some View {
         ZStack(alignment: .bottom) {
             Group {
                 switch selectedTab {
-                case .home: HomeView()
+                case .home: HomeView(user: user)
                 case .search: Color.gray.ignoresSafeArea()
                 case .money: Color.red.ignoresSafeArea()
                 case .settings: Color.black.ignoresSafeArea()
@@ -77,5 +78,5 @@ struct MainTabView: View {
     }
 }
 #Preview {
-    MainTabView()
+    MainTabView(user: .init(name: "Valer", email: "valer@gmail.com", smokingData: .init(packSize: 1, packPrice: 1, dailyAverage: 1)))
 }
