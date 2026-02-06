@@ -16,7 +16,7 @@ struct MainTabView: View {
             Group {
                 switch selectedTab {
                 case .home: HomeView(user: user)
-                case .search: Color.gray.ignoresSafeArea()
+                case .activity: RhythmView(user: user)
                 case .money: Color.red.ignoresSafeArea()
                 case .settings: Color.black.ignoresSafeArea()
                 }

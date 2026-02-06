@@ -17,24 +17,6 @@ class HomeViewModel: ObservableObject {
         user.entries.filter { calendar.isDateInToday($0.timestamp) }.count
     }
     
-    var hourlyBreakdownForToday: [Int: Int] {
-        let todayEntries = user.entries.filter { calendar.isDateInToday($0.timestamp) }
-        
-        let grouped = Dictionary(grouping: todayEntries) { entry in
-            calendar.component(.hour, from: entry.timestamp)
-        }
-        
-        return grouped.mapValues { $0.count }
-    }
-    
-    var dailyHistory: [Date: Int] {
-        let grouped = Dictionary(grouping: user.entries) { entry in
-            calendar.startOfDay(for: entry.timestamp)
-        }
-        
-        return grouped.mapValues { $0.count }
-    }
-    
     init(user: User) {
         self.user = user
     }

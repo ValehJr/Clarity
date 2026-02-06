@@ -14,7 +14,7 @@ extension View {
         foregroundColor: Color = .primary
     ) -> some View {
         self
-            .font(.system(size: size,weight: weight))
+            .font(.system(size: size,weight: weight, design: .rounded))
             .foregroundColor(foregroundColor)
     }
     

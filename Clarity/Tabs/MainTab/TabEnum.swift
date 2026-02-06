@@ -9,14 +9,14 @@ import SwiftUI
 
 enum Tab: String, CaseIterable {
     case home = "Home"
-    case search = "Search"
+    case activity = "Activity"
     case money = "Money"
     case settings = "Setup"
     
     var icon: ImageResource {
         switch self {
         case .home: return .homeTabIc
-        case .search: return .activityIc
+        case .activity: return .activityIc
         case .money: return .moneyIc
         case .settings: return .boxIc
         }

@@ -32,16 +32,17 @@ struct HomeView: View {
             VStack {
                 title
                     .frame(maxWidth: .infinity,alignment: .leading)
-                
-                todaysCount
-                    .padding(.top,60)
-                
-                plusButton
-                    .padding([.vertical,.trailing])
-                    .frame(maxWidth: .infinity,alignment: .trailing)
-
-                calendarView
+                ScrollView(.vertical, showsIndicators: false) {
+                    todaysCount
+                        .padding(.top,60)
                     
+                    plusButton
+                        .padding([.vertical,.trailing])
+                        .frame(maxWidth: .infinity,alignment: .trailing)
+
+                    calendarView
+                }
+                .scrollBounceBehavior(.basedOnSize)
             }
             .padding()
         }
