@@ -9,7 +9,11 @@ import SwiftData
 import Foundation
 
 @Model
-class SmokeEntry {
+class SmokeEntry: Comparable {
+    static func < (lhs: SmokeEntry, rhs: SmokeEntry) -> Bool {
+        lhs.timestamp < rhs.timestamp
+    }
+    
     var timestamp: Date
  
     var user: User?

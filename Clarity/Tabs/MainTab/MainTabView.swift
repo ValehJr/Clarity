@@ -22,6 +22,7 @@ struct MainTabView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .safeAreaPadding(.bottom,70)
             
             customTabBar
                 .padding(.horizontal, 12)

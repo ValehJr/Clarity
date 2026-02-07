@@ -21,11 +21,22 @@ struct RhythmView: View {
             VStack {
                 title
                     .frame(maxWidth: .infinity,alignment: .leading)
+                
+                HStack(spacing:18) {
+                    average
+                    
+                    peakTime
+                }
+                .padding(.top,12)
+                .fixedSize(horizontal: false, vertical: true)
+                
                 ScrollView(.vertical, showsIndicators: false) {
                     hourlyChartView
-                        .padding(.vertical)
+                        .padding(.vertical,12)
                     
                     dailyChartView
+                        .padding(.bottom,12)
+                    
                 }
                 .scrollBounceBehavior(.basedOnSize)
             }
@@ -36,7 +47,7 @@ struct RhythmView: View {
     
     var title: some View {
         Text("ACTIVITY")
-            .appFont(weight: .bold, size: 30,foregroundColor: .primaryTextCl)
+            .appFont(weight: .bold, size: 28,foregroundColor: .primaryTextCl)
     }
     
     var dailyChartView: some View {
@@ -45,6 +56,53 @@ struct RhythmView: View {
     
     var hourlyChartView: some View {
         BarChartView(dates: vm.hourlyTimes, history: vm.hourlyCounts, title: "Last 7 Hours", type: .hourly)
+    }
+    
+    var average: some View {
+        VStack(alignment:.leading,spacing:8) {
+            Text("7 Days Average")
+                .appFont(weight: .semibold, size: 16,foregroundColor: .secondaryTextCl)
+            
+            Text(vm.averageSmokedString)
+                .appFont(weight: .bold, size: 20,foregroundColor: .primaryTextCl)
+            
+            Text(vm.comparisonString)
+                .appFont(weight: .semibold, size: 12, foregroundColor: .successCl)
+        }
+        .frame(maxWidth: .infinity,maxHeight: .infinity)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.fieldStrokeCl.opacity(0.7))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(.fieldStrokeCl, lineWidth: 2)
+        )
+    }
+    
+    var peakTime: some View {
+        VStack(alignment:.leading,spacing:8) {
+            Text("7 Days Peak Time")
+                .appFont(weight: .semibold, size: 16,foregroundColor: .secondaryTextCl)
+                .minimumScaleFactor(0.3)
+                .lineLimit(1)
+            
+            Text(vm.peakTimeString)
+                .appFont(weight: .bold, size: 20,foregroundColor: .primaryTextCl)
+            
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.fieldStrokeCl.opacity(0.7))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(.fieldStrokeCl, lineWidth: 2)
+        )
     }
 }
 
