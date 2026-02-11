@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct RhythmView: View {
-    @StateObject private var vm: RhythmViewModel
+struct ActivityView: View {
+    @StateObject private var vm: ActivityViewModel
     
     init(user: User) {
-        _vm = StateObject(wrappedValue: RhythmViewModel(user: user))
+        _vm = StateObject(wrappedValue: ActivityViewModel(user: user))
     }
     var body: some View {
         ZStack(alignment:.top) {
@@ -107,5 +107,5 @@ struct RhythmView: View {
 }
 
 #Preview {
-    RhythmView(user: .init(name: "Valeh", email: "I", smokingData: .init(packSize: 1, packPrice: 1, dailyAverage: 10)))
+    ActivityView(user: .init(name: "Valeh", email: "I", smokingData: .init(packSize: 1, packPrice: 1, dailyAverage: 10)))
 }

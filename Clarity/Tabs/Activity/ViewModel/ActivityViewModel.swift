@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import SwiftUI
 
-class RhythmViewModel: ObservableObject {
+class ActivityViewModel: ObservableObject {
     @Published var user: User
     
     init(user: User) {
