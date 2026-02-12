@@ -28,6 +28,7 @@ struct MainTabView: View {
                 .padding(.horizontal, 12)
                 .padding(.bottom, 10)
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
     var customTabBar: some View {

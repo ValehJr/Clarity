@@ -64,7 +64,7 @@ struct GoalAddView: View {
                 strokeColor: .fieldStrokeCl
             )
             .autocorrectionDisabled(true)
-            .textContentType(.name)
+            .keyboardType(.numberPad)
             .appFont(weight: .medium, size: 14)
     }
     

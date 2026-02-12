@@ -11,46 +11,57 @@ import SwiftUI
 
 class ActivityViewModel: ObservableObject {
     @Published var user: User
+    @Published var dailyDays: [Date] = []
+    @Published var dailyCounts: [Date: Int] = [:]
+    
+    @Published var hourlyTimes: [Date] = []
+    @Published var hourlyCounts: [Date: Int] = [:]
+    
+    @Published var averageSmokedString: String = "--"
+    @Published var peakTimeString: String = "--"
+    @Published var comparisonString: String = "--"
+    @Published var comparisonColor: Color = .secondaryTextCl
     
     init(user: User) {
         self.user = user
+        refreshStats()
     }
     
-    var dailyDays: [Date] { user.last7Days }
-    var dailyCounts: [Date: Int] { user.dailyHistory }
-    
-    var hourlyTimes: [Date] { user.last7Hours }
-    var hourlyCounts: [Date: Int] { user.hourlyHistory }
-    
-    var averageSmokedString: String {
-        guard user.hasEnoughDataForWeeklyStats else { return "--" }
-        return String(format: "%.1f", user.weeklyDailyAverage)
-    }
-    
-    var peakTimeString: String {
-        guard let hour = user.peakSmokingHour else { return "--" }
-        let date = Calendar.current.date(from: DateComponents(hour: hour)) ?? Date()
-        return TimeFormatter.hourly.string(from: date).lowercased()
-    }
-    
-    var comparisonString: String {
-        guard user.hasEnoughDataForWeeklyStats else { return "--" }
-        let percent = user.percentageChangeFromPreviousWeek
-        let sign = percent > 0 ? "+" : ""
-        return "\(sign)\(Int(percent))% vs last week"
-    }
-
-    var comparisonColor: Color {
-        guard user.hasEnoughDataForWeeklyStats else { return .secondaryTextCl }
+    func refreshStats() {
+        self.dailyDays = SmokingStatsService.getLast7Days()
+        self.dailyCounts = SmokingStatsService.getDailyHistory(entries: user.entries)
         
-        let percent = user.percentageChangeFromPreviousWeek
+        self.hourlyTimes = SmokingStatsService.getLast7Hours()
+        self.hourlyCounts = SmokingStatsService.getHourlyHistory(entries: user.entries)
         
-        if percent > 0 {
-            return .warningCl
-        } else if percent < 0 {
-            return .successCl
+        let stats = SmokingStatsService.getDetailedWeeklyStats(entries: user.entries)
+        
+        if stats.hasEnoughData {
+            self.averageSmokedString = String(format: "%.1f", stats.average)
+            
+            if let peak = stats.peakHour {
+                let date = Calendar.current.date(from: DateComponents(hour: peak)) ?? Date()
+                self.peakTimeString = TimeFormatter.hourly.string(from: date).lowercased()
+            } else {
+                self.peakTimeString = "--"
+            }
+            
+            let sign = stats.percentChange > 0 ? "+" : ""
+            self.comparisonString = "\(sign)\(Int(stats.percentChange))% vs last week"
+            
+            if stats.percentChange > 0 {
+                self.comparisonColor = .warningCl
+            } else if stats.percentChange < 0 {
+                self.comparisonColor = .successCl
+            } else {
+                self.comparisonColor = .secondaryTextCl
+            }
+            
         } else {
-            return .secondaryTextCl
+            self.averageSmokedString = "--"
+            self.peakTimeString = "--"
+            self.comparisonString = "--"
+            self.comparisonColor = .secondaryTextCl
         }
     }
 }

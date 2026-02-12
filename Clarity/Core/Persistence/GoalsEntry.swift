@@ -15,9 +15,10 @@ class GoalsEntry: Identifiable {
     var amount: Double
     var user: User?
     
-    init(id: UUID = UUID(), title: String, amount: Double) {
+    init(id: UUID = UUID(), title: String, amount: Double,user: User? = nil) {
         self.id = id
         self.title = title
         self.amount = amount
+        self.user = user
     }
 }

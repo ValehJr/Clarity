@@ -24,8 +24,13 @@ struct ReclaimedView: View {
                 title
                     .frame(maxWidth: .infinity,alignment: .leading)
                 
-                moneyView
-                    .padding(.vertical,12)
+                HStack(spacing: 12) {
+                    moneyView
+                    
+                    cigarettesAvoidedView
+                }
+                .padding(.vertical,12)
+                
                 
                 timeView
                 
@@ -38,9 +43,9 @@ struct ReclaimedView: View {
             .padding()
             .blur(radius: vm.showGoalPopup ? 4 : 0)
             .disabled(vm.showGoalPopup)
-        
+            
             if vm.showGoalPopup {
-                    Color.black.opacity(0.6)
+                Color.black.opacity(0.6)
                     .ignoresSafeArea()
                     .onTapGesture {
                         withAnimation {
@@ -54,6 +59,8 @@ struct ReclaimedView: View {
                     amountText: vm.goalAmount,
                     onSave: { name, amount in
                         print("Added: \(name) for $\(amount)")
+                        
+                        vm.addGoal(title: name, amount: amount)
                         
                         withAnimation {
                             vm.showGoalPopup = false
@@ -77,72 +84,113 @@ struct ReclaimedView: View {
     }
     
     var moneyView: some View {
-        VStack {
-            HStack {
-                Image(.dollarIc)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 32,height: 32)
-                    .foregroundStyle(.profileICCl)
-                    .padding(12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(.black.opacity(0.3))
-                    )
-                Spacer()
-                
-                VStack(alignment:.trailing,spacing:12) {
-                    Text("Money Saved")
-                        .appFont(weight: .semibold, size: 22,foregroundColor: .profileICCl)
-                    
-                    Text("52.52$")
-                        .appFont(weight: .black, size: 36,foregroundColor: .primaryTextCl)
-                }
-            }
+        VStack(alignment: .leading, spacing: 12) {
+            Image(.dollarIc)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24,height: 24)
+                .foregroundStyle(vm.isMoneyLost ? .white : .profileICCl)
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(vm.isMoneyLost ? .warningCl.opacity(0.3) : .profileICCl.opacity(0.3))
+                )
+            
+            Text(vm.isMoneyLost ? "Money Lost" : "Money Saved")
+                .appFont(weight: .semibold, size: 16,foregroundColor: vm.isMoneyLost ? .white : .profileICCl)
+            
+            Text(vm.regainedAmountString)
+                .appFont(weight: .black, size: 24,foregroundColor: .white)
         }
         .padding()
+        .frame(maxWidth: .infinity,alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(LinearGradient(colors: [.profileICCl.opacity(0.3),.profileICCl.opacity(0.2),.profileICCl.opacity(0.15)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .fill(vm.isMoneyLost ? LinearGradient(colors: [.warningCl.opacity(0.6),.warningCl.opacity(0.4),.warningCl.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(colors: [.profileICCl.opacity(0.3),.profileICCl.opacity(0.2),.profileICCl.opacity(0.15)], startPoint: .topLeading, endPoint: .bottomTrailing))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(.profileICCl.opacity(0.6),lineWidth: 1)
+                .stroke(vm.isMoneyLost ? .warningCl.opacity(0.6) : .profileICCl.opacity(0.6),lineWidth: 1)
         )
     }
     
     var timeView: some View {
-        VStack {
-            HStack {
-                Image(.clockIc)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 32,height: 32)
-                    .foregroundStyle(.timeRegainedCl)
-                    .padding(12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(.black.opacity(0.3))
-                    )
-                Spacer()
+        HStack {
+            Image(.clockIc)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 32,height: 32)
+                .foregroundStyle(vm.isTimeLost ? .white : .timeRegainedCl)
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(vm.isTimeLost ? .warningCl.opacity(0.3) : .timeRegainedCl.opacity(0.3))
+                )
+            
+            Spacer()
+            
+            VStack(alignment: .trailing, spacing: 4) {
                 
-                VStack(alignment:.trailing,spacing:12) {
-                    Text("Time Regained")
-                        .appFont(weight: .semibold, size: 22,foregroundColor: .timeRegainedCl)
-                    
-                    Text("12h 45m")
-                        .appFont(weight: .black, size: 36,foregroundColor: .primaryTextCl)
-                }
+                Text(vm.isTimeLost ? "Time Lost" : "Time Regained")
+                    .appFont(weight: .semibold, size: 20,foregroundColor: vm.isTimeLost ? .white : .timeRegainedCl)
+                
+                Text(vm.regainedTime)
+                    .appFont(weight: .black, size: 32,foregroundColor: .white)
             }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(LinearGradient(colors: [.successCl.opacity(0.6),.successCl.opacity(0.4),.successCl.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .fill(vm.isTimeLost ? LinearGradient(colors: [.warningCl.opacity(0.6),.warningCl.opacity(0.4),.warningCl.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(colors: [.successCl.opacity(0.6),.successCl.opacity(0.4),.successCl.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(.successCl,lineWidth: 1)
+                .stroke(vm.isMoneyLost ? .warningCl.opacity(0.6) : .successCl,lineWidth: 1)
+        )
+    }
+    
+    var cigarettesAvoidedView: some View {
+        VStack(alignment: .leading,spacing: 12) {
+            Image(.flameIc)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24,height: 24)
+                .foregroundStyle(.white)
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(.white.opacity(0.2))
+                )
+            
+            
+            Text("Cigarettes Avoided")
+                .appFont(weight: .semibold, size: 16,foregroundColor: .white)
+                .minimumScaleFactor(0.9)
+                .lineLimit(1)
+            
+            Text(vm.cigarettesAvoided)
+                .appFont(weight: .bold, size: 24,foregroundColor: .white)
+        }
+        .frame(maxWidth: .infinity,alignment: .leading)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            .cigarettesAvoidedGradientThreeCl,
+                            .cigarettesAvoidedGradientTwoCl,
+                            .cigarettesAvoidedGradientOneCl.opacity(0.8)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .shadow(color: .cigarettesAvoidedGradientThreeCl.opacity(0.3), radius: 10, x: 0, y: 5)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(.cigarettesAvoidedGradientTwoCl,lineWidth: 1)
         )
     }
     
@@ -162,7 +210,7 @@ struct ReclaimedView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24,height: 24)
-                    .foregroundStyle(.primaryTextCl)
+                    .foregroundStyle(.white)
             }
             .padding(8)
             .background(
@@ -174,15 +222,32 @@ struct ReclaimedView: View {
     }
     
     var goals: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            LazyVStack(spacing: 24) {
-                GoalView(goalText: "AirPods", goalMoney: 120, savedMoney: 32)
-                GoalView(goalText: "AirPods", goalMoney: 120, savedMoney: 32)
-                GoalView(goalText: "AirPods", goalMoney: 120, savedMoney: 32)
-                GoalView(goalText: "AirPods", goalMoney: 120, savedMoney: 32)
+        List {
+            ForEach(vm.sortedGoals) { goal in
+                GoalView(
+                    goalText: goal.title,
+                    goalMoney: goal.amount,
+                    savedMoney: max(0, vm.currentSavings)
+                )
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 0))
                 
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        withAnimation {
+                            vm.deleteGoal(goal)
+                        }
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                    .tint(.red)
+                }
             }
         }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .scrollIndicators(.hidden)
     }
 }
 

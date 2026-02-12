@@ -66,8 +66,8 @@ struct ActivityView: View {
             Text(vm.averageSmokedString)
                 .appFont(weight: .bold, size: 20,foregroundColor: .primaryTextCl)
             
-            Text(vm.comparisonString)
-                .appFont(weight: .semibold, size: 12, foregroundColor: .successCl)
+//            Text(vm.comparisonString)
+//                .appFont(weight: .semibold, size: 12, foregroundColor: .successCl)
         }
         .frame(maxWidth: .infinity,maxHeight: .infinity)
         .padding()
