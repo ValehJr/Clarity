@@ -18,6 +18,9 @@ class User {
     @Relationship(deleteRule: .cascade, inverse: \SmokeEntry.user)
     var entries: [SmokeEntry] = []
     
+    @Relationship(deleteRule: .cascade, inverse: \GoalsEntry.user)
+    var goalsEntries: [GoalsEntry] = []
+    
     init(name: String, email: String, smokingData: SmokingData) {
         self.id = UUID().uuidString
         self.name = name

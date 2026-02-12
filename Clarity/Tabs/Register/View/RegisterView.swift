@@ -37,6 +37,8 @@ struct RegisterView: View {
                     Spacer()
                 }
                 .padding(.top,90)
+                .padding(.horizontal,24)
+
             }
             .onTapGesture {
                 isNameFocused = false
@@ -94,7 +96,6 @@ struct RegisterView: View {
                 .textContentType(.name)
                 .appFont(weight: .medium, size: 14)
         }
-        .padding(.horizontal,24)
     }
     
     var emailField: some View {
@@ -117,7 +118,6 @@ struct RegisterView: View {
                 .textInputAutocapitalization(.never)
                 .appFont(weight: .medium, size: 14)
         }
-        .padding(.horizontal,24)
     }
     
     var continueButton: some View {
@@ -132,7 +132,6 @@ struct RegisterView: View {
                         .fill(vm.isContinueButtonValid ? .primaryAccentCl : .primaryAccentCl.opacity(0.5))
                 )
         }
-        .padding(.horizontal,24)
         .disabled(!vm.isContinueButtonValid)
     }
 }

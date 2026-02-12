@@ -17,7 +17,7 @@ struct MainTabView: View {
                 switch selectedTab {
                 case .home: HomeView(user: user)
                 case .activity: ActivityView(user: user)
-                case .money: ReclaimedView()
+                case .money: ReclaimedView(user: user)
                 case .settings: Color.black.ignoresSafeArea()
                 }
             }
