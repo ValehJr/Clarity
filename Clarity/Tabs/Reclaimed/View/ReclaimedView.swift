@@ -10,6 +10,8 @@ import SwiftUI
 struct ReclaimedView: View {
     
     @StateObject private var vm: ReclaimedViewModel
+    @Environment(\.colorScheme) var colorScheme
+    
     
     init(user: User) {
         _vm = StateObject(wrappedValue: ReclaimedViewModel(user: user))
@@ -83,114 +85,113 @@ struct ReclaimedView: View {
             .appFont(weight: .bold, size: 28,foregroundColor: .primaryTextCl)
     }
     
-    var moneyView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Image(.dollarIc)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24,height: 24)
-                .foregroundStyle(vm.isMoneyLost ? .white : .profileICCl)
-                .padding(12)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(vm.isMoneyLost ? .warningCl.opacity(0.3) : .profileICCl.opacity(0.3))
-                )
-            
-            Text(vm.isMoneyLost ? "Money Lost" : "Money Saved")
-                .appFont(weight: .semibold, size: 16,foregroundColor: vm.isMoneyLost ? .white : .profileICCl)
-            
-            Text(vm.regainedAmountString)
-                .appFont(weight: .black, size: 24,foregroundColor: .white)
-        }
-        .padding()
-        .frame(maxWidth: .infinity,alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(vm.isMoneyLost ? LinearGradient(colors: [.warningCl.opacity(0.6),.warningCl.opacity(0.4),.warningCl.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(colors: [.profileICCl.opacity(0.3),.profileICCl.opacity(0.2),.profileICCl.opacity(0.15)], startPoint: .topLeading, endPoint: .bottomTrailing))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(vm.isMoneyLost ? .warningCl.opacity(0.6) : .profileICCl.opacity(0.6),lineWidth: 1)
+    private var moneyView: some View {
+        StatCard(
+            icon: .dollarIc,
+            title: vm.isMoneyLost ? "Money Lost" : "Money Saved",
+            value: vm.regainedAmountString,
+            layout: .vertical,
+            style: moneyStyle
         )
     }
     
-    var timeView: some View {
-        HStack {
-            Image(.clockIc)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 32,height: 32)
-                .foregroundStyle(vm.isTimeLost ? .white : .timeRegainedCl)
-                .padding(12)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(vm.isTimeLost ? .warningCl.opacity(0.3) : .timeRegainedCl.opacity(0.3))
-                )
-            
-            Spacer()
-            
-            VStack(alignment: .trailing, spacing: 4) {
-                
-                Text(vm.isTimeLost ? "Time Lost" : "Time Regained")
-                    .appFont(weight: .semibold, size: 20,foregroundColor: vm.isTimeLost ? .white : .timeRegainedCl)
-                
-                Text(vm.regainedTime)
-                    .appFont(weight: .black, size: 32,foregroundColor: .white)
-            }
+    private var moneyStyle: StatCardStyle {
+        if vm.isMoneyLost {
+            return StatCardStyle(
+                background: LinearGradient(
+                    colors: [.lostCl, .lostTwoCl],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                border: colorScheme == .dark ? .lostCl.opacity(0.5) : nil,
+                iconForeground: .white,
+                iconBackground: .white.opacity(0.2),
+                titleColor: .white.opacity(0.9)
+            )
+        } else {
+            return StatCardStyle(
+                background: LinearGradient(
+                    colors: colorScheme == .dark
+                    ? [.profileICCl.opacity(0.6), .profileICCl.opacity(0.4)]
+                    : [.ceruleanCl, .bluerocraticCl],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                border: colorScheme == .dark ? .profileICCl.opacity(0.6) : nil,
+                iconForeground: .white,
+                iconBackground: .white.opacity(0.2),
+                titleColor: .white.opacity(0.9)
+            )
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(vm.isTimeLost ? LinearGradient(colors: [.warningCl.opacity(0.6),.warningCl.opacity(0.4),.warningCl.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(colors: [.successCl.opacity(0.6),.successCl.opacity(0.4),.successCl.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(vm.isMoneyLost ? .warningCl.opacity(0.6) : .successCl,lineWidth: 1)
+    }
+    
+    
+    private var timeView: some View {
+        StatCard(
+            icon: .clockIc,
+            title: vm.isTimeLost ? "Time Lost" : "Time Regained",
+            value: vm.regainedTime,
+            layout: .horizontal,
+            style: timeStyle
         )
     }
     
-    var cigarettesAvoidedView: some View {
-        VStack(alignment: .leading,spacing: 12) {
-            Image(.flameIc)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24,height: 24)
-                .foregroundStyle(.white)
-                .padding(12)
-                .background(
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(.white.opacity(0.2))
-                )
-            
-            
-            Text("Cigarettes Avoided")
-                .appFont(weight: .semibold, size: 16,foregroundColor: .white)
-                .minimumScaleFactor(0.9)
-                .lineLimit(1)
-            
-            Text(vm.cigarettesAvoided)
-                .appFont(weight: .bold, size: 24,foregroundColor: .white)
+    private var timeStyle: StatCardStyle {
+        if vm.isTimeLost {
+            return StatCardStyle(
+                background: LinearGradient(
+                    colors: [.lostCl, .lostTwoCl],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                border: colorScheme == .dark ? .lostCl.opacity(0.5) : nil,
+                iconForeground: .white,
+                iconBackground: .white.opacity(0.2),
+                titleColor: .white.opacity(0.9)
+            )
+        } else {
+            return StatCardStyle(
+                background: LinearGradient(
+                    colors: colorScheme == .dark
+                    ? [.timeRegainedCl.opacity(0.3), .timeRegainedCl.opacity(0.15)]
+                    : [.envyLoveCl, .prairieCl],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                border: colorScheme == .dark ? .timeRegainedCl.opacity(0.6) : nil,
+                iconForeground: colorScheme == .dark ? .timeRegainedCl : .white,
+                iconBackground: colorScheme == .dark
+                ? .timeRegainedCl.opacity(0.3)
+                : .white.opacity(0.2),
+                titleColor: colorScheme == .dark
+                ? .timeRegainedCl
+                : .white.opacity(0.9)
+            )
         }
-        .frame(maxWidth: .infinity,alignment: .leading)
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            .cigarettesAvoidedGradientThreeCl,
-                            .cigarettesAvoidedGradientTwoCl,
-                            .cigarettesAvoidedGradientOneCl.opacity(0.8)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .shadow(color: .cigarettesAvoidedGradientThreeCl.opacity(0.3), radius: 10, x: 0, y: 5)
+    }
+    
+    
+    private var cigarettesAvoidedView: some View {
+        StatCard(
+            icon: .flameIc,
+            title: "Cigarettes Avoided",
+            value: vm.cigarettesAvoided,
+            layout: .vertical,
+            style: cigarettesStyle
         )
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(.cigarettesAvoidedGradientTwoCl,lineWidth: 1)
+    }
+    
+    private var cigarettesStyle: StatCardStyle {
+        StatCardStyle(
+            background: LinearGradient(
+                colors: [.cigarettesAvoidedOneCl, .cigarettesAvoidedTwoCl],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ),
+            border: nil,
+            iconForeground: .white,
+            iconBackground: .white.opacity(0.2),
+            titleColor: .white.opacity(0.9)
         )
     }
     

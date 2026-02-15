@@ -38,7 +38,7 @@ struct SmokingStatsService {
     
     static func calculateTimeReclaimed(user: User) -> Double {
         let data = user.smokingData
-        let minutesPerCigarette = 20.0
+        let minutesPerCigarette = 17.0
         
         let startDate = user.entries.sorted().first?.timestamp ?? Date()
         let actualSmokedCount = user.entries.count

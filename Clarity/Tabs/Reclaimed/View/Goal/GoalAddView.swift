@@ -102,11 +102,7 @@ struct GoalAddView: View {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(
-                        LinearGradient(
-                            colors: [.progressBarFirstCl, .progressBarSecondCl, .progressBarThirdCl],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
+                        Color.progressBarFirstCl
                     )
             )
             .opacity(goalNameText.isEmpty || amountText.isEmpty ? 0.5 : 1.0)
